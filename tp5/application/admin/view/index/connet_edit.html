@@ -1,0 +1,57 @@
+<!--_meta 作为公共模版分离出去-->
+{include file="common/meta"}
+<!--/meta 作为公共模版分离出去-->
+<body>
+<article class="page-container">
+	{if $id == 1}
+	<form action="{:url('admin/index/connet_update')}" method="post" class="form form-horizontal" id="form-member-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>电话号码：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$phone}" placeholder="" id="mobile" name="mobile">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+	{/if}
+	{if $id == 2}
+	<form action="{:url('admin/index/connet_update')}" method="post" class="form form-horizontal" id="form-member-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>QQ号码：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$qq}" placeholder="" id="qq" name="qq">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+	{/if}
+	{if $id == 3}
+	<form action="{:url('admin/index/connet_update')}" method="post" class="form form-horizontal" id="form-member-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>微信：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$wei}" placeholder="" id="wei" name="wei">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+	{/if}
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+	
+	{include file="common/footer"}
+
+<!--/_footer 作为公共模版分离出去-->

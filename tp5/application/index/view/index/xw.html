@@ -1,0 +1,75 @@
+<!--/hearder 作为公共模版分离出去-->
+{include file="common/hearder"}
+<title>新闻资讯</title>		
+{include file="common/top"}
+<!--/hearder 作为公共模版分离出去-->
+		
+		<section class="container page clearfix"  style="display:block" id="g">
+			<div class="page-tit wow fadeInUp">新闻中心</div>
+			<ul class="sub-list wow fadeIn" data-wow-delay=".3s">
+				<li class="active"><a href="#" class="gon">公司新闻</a></li>
+				<li><a href="#" class="zi">新闻资讯</a></li>
+			</ul>
+			<div class="new-list wow fadeInUp" data-wow-delay=".3s">
+			{foreach $data as $key => $value}
+			{if $value['type'] == 0}
+				<ul>
+					<li>
+						<span>
+							<strong>{$value['day']}</strong>
+							{$value['m']}
+						</span>
+						<a href="{:url('index/index/xwxx')}?id={$value['id']}">{$value['title']}</a>
+						<p>{$value['detail']}...</p>
+					</li>
+				</ul>
+			{/if}
+			{/foreach}
+			</div>
+		</section>
+
+		<section class="container page clearfix"  style="display:none" id="z">
+			<div class="page-tit wow fadeInUp">新闻中心</div>
+			<ul class="sub-list wow fadeIn" data-wow-delay=".3s">
+				<li><a href="#" class="gon">公司新闻</a></li>
+				<li class="active"><a href="#" class="zi">新闻资讯</a></li>
+			</ul>
+			<div class="new-list wow fadeInUp" data-wow-delay=".3s">
+			{foreach $data as $key => $value}
+			{if $value['type'] == 1}
+				<ul>
+					<li>
+						<span>
+							<strong>{$value['day']}</strong>
+							{$value['m']}
+						</span>
+						<a href="{:url('index/index/xwxx')}?id={$value['id']}">{$value['title']}</a>
+						<p>{$value['detail']}...</p>
+					</li>
+				</ul>
+			{/if}
+			{/foreach}
+			</div>
+		</section>
+		
+		
+<!--_footer 作为公共模版分离出去-->
+	{include file="common/footer_master"}
+<!--/_footer 作为公共模版分离出去-->
+<!--下方是  member_list.html  页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script type="text/javascript" src="../../lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="../../lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="../../js/ajax.js"></script>
+<script type="text/javascript">
+$(".zi").click(function() {
+	$("#g").hide();
+	$("#z").show();
+});
+$(".gon").click(function() {
+	$("#g").show();
+	$("#z").hide();
+})
+</script>
+</body>
+</html>

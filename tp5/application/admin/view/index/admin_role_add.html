@@ -1,0 +1,95 @@
+{include file="common/meta"}
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-admin-role-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="roleName" name="roleName">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">描述：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="roleDetail" name="">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">用户：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<dl class="permission-list">
+				{foreach $data as $key => $value}
+					<dt>
+						<label>
+							<input type="checkbox" value="{$value['user_name']}" name="user_check" class="checked">
+							{$value['user_name']}
+						</label>
+					</dt>
+				{/foreach}
+				</dl>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius" id="admin-role-save" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+			</div>
+		</div>
+	</form>
+</article>
+</body>
+
+<!--_footer 作为公共模版分离出去-->
+	
+	{include file="common/footer_master"}
+
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写 admin_role_add.html 页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#admin-role-save").on('click', function() {
+		var checked = $("input[type='checkbox']:checked").val([]);
+		var names = "";
+		for(var i=0;i<checked.length;i++) {
+			names += checked[i].value + ",";
+		}
+		//console.log(names);
+		
+		var n = names.substring(0,names.length-1);//去掉最后一个逗号
+		// var split_n = n.split(',');//转换成数组
+		//console.log(n);
+		//获取其他字段
+		var role_name = $("#roleName").val();
+		var role_detail = $("#roleDetail").val();
+		//console.log(role_name);
+		//console.log(role_detail);
+		$.ajax({
+				url: "{:url('admin/index/role_inser')}",
+				async: false,
+				data:{username:n,name:role_name,detail:role_detail},
+				dataType:'json',
+				success:function(data) {
+					//console.log('success');
+					if(data.status == 1) {
+						var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.msg('添加成功', {icon: 6,time:4000}); //添加成功后提示
+                        window.parent.location.reload() //刷父界面
+                        parent.layer.close(index); //关闭弹层的窗口
+					} else {
+						parent.layer.msg('添加失败', {icon: 5,time:2000});
+					}
+				},
+				error:function(data) {
+					parent.layer.msg('添加失败', {icon: 5,time:2000});
+					var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index); //关闭弹层的窗口
+				}
+			})
+	})
+})
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</html>

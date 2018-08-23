@@ -1,0 +1,112 @@
+{include file="common/meta"}
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="formmadd">
+	<input type="hidden" name="id" value="{$data['al_id']}">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">案例图：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<a title="点击更换图片"><img src="{$img['img']}" name="image" style="width:400px;height:200px;" onclick="selectimg()" id="imgselect"></a>
+				<input type="file" multiple name="image" id="img" style="display: none;" onchange="fileSelect()">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>案例图名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$img['img_title']}" placeholder="写上名称" name="titles" style="width:1275.75px;margin-left:-10px;">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">案例详细：</label>
+			<div class="formControls col-xs-8 col-sm-9" style="margin-top:30px;">
+				<textarea name="abstract" cols="" rows="" class="textarea"  placeholder="说点什么……" style="height:300px;">{$data['desc']}</textarea>
+				<p class="textarea-numberbar"><em class="textarea-length">0</em>/10000</p>
+				<!-- <textarea id="addtext" style="display: none;"></textarea> -->
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">客户：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$data['client']}" placeholder="客户" name="client" style="width:1275.75px;margin-left:-10px;">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">行业：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$data['class']}" placeholder="客户" name="class" style="width:1275.75px;margin-left:-10px;">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">服务：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$data['fuwu']}" placeholder="客户" name="fuwu" style="width:1275.75px;margin-left:-10px;">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">评价：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$data['ping']}" placeholder="客户" name="ping" style="width:1275.75px;margin-left:-10px;">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button class="btn btn-primary radius" type="submit" id="baocun"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="removeIframe();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+	
+	{include file="common/footer_master"}
+
+<!--/_footer 作为公共模版分离出去-->
+<!--下方是  member_list.html  页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script type="text/javascript" src="../../lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="../../lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="../../js/ajax.js"></script>
+<script type="text/javascript">
+/*图片-添加*/
+function selectimg()
+{
+	$("#img").click();
+}
+
+function fileSelect()
+{
+	var oFReader = new FileReader();
+		var file = document.getElementById('img').files[0];
+		oFReader.readAsDataURL(file);
+		oFReader.onloadend = function(oFRevent){
+			var src = oFRevent.target.result;
+			//console.log(src);
+			$("#imgselect").attr('src',src);
+	    }
+}
+
+$("#baocun").on('click', function() {
+	var form=document.getElementById("formmadd");  
+    var formdata = new FormData(form);
+	$.ajax({
+             type: "POST",
+             url: "{:url('admin/index/al_edit_update')}",
+             processData: false,  // 不要处理发送的数据
+             contentType: false,   // 不要设置Content-Type请求头
+             data:formdata,
+             dataType:'json',
+             success: function (data) {
+                 if (data.status == 1) {
+                 	console.log(data);
+                    document.location.reload(); //刷新面面
+                 } else {
+                 	alert('无更新');
+                     console.log(data);	
+                 }
+             }
+         });
+})
+</script>
+</body>
+</html>

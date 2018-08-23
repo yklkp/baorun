@@ -1,0 +1,20 @@
+<!--/hearder 作为公共模版分离出去-->
+{include file="common/hearder"}
+<title>新闻资讯</title>		
+{include file="common/top"}
+<!--/hearder 作为公共模版分离出去-->
+		
+		<section class="container page clearfix">
+			<div class="n-title">
+				<h1 class="wow fadeInUp">{$data['title']}</h1>
+				<time class="inf wow fadeIn" data-wow-delay=".3s">{$data['time']}</time>
+			</div>
+			
+			<div class="news-txt wow fadeInUp" data-wow-delay=".3s">
+				<p>{$data['detail']}</p>
+			</div>
+		</section>
+
+<!--_footer 作为公共模版分离出去-->
+	{include file="common/footer"}
+<!--/_footer 作为公共模版分离出去-->

@@ -1,0 +1,166 @@
+﻿{include file="common/meta"}
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-admin-role-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<select class="formControls col-xs-8 col-sm-9" style="width: 550px;height: 30px;" name="selected" id="select">
+				{foreach $user as $key => $value}
+					<option value="{$value['uid']}">{$value['user_name']}</option>
+				{/foreach}
+				</select>
+				<!-- <input type="text" class="input-text" value="" placeholder="" id="roleName" name="roleName"> -->
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">网站角色：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<dl class="permission-list">
+					<dt>
+						<label>
+							<input type="checkbox" value="图片管理" name="user-Character-0" id="user-Character-0">
+							图片管理</label>
+					</dt>
+					<dd>
+						<dl class="cl permission-list2">
+							<dt>
+								<label class="">
+									<input type="checkbox" value="首页管理" name="user-Character-0-0" id="user-Character-0-0">
+									首页管理</label>
+							</dt>
+						</dl>
+						<dl class="cl permission-list2">
+							<dt>
+								<label class="">
+									<input type="checkbox" value="案例管理" name="user-Character-0-1" id="user-Character-0-1">
+									案例管理</label>
+							</dt>
+						</dl>
+					</dd>
+				</dl>
+				<dl class="permission-list">
+					<dt>
+						<label>
+							<input type="checkbox" value="内容管理" name="user-Character-0" id="user-Character-1">
+							内容管理</label>
+					</dt>
+					<dd>
+						<dl class="cl permission-list2">
+							<dt>
+								<label class="">
+									<input type="checkbox" value="新闻资讯" name="user-Character-1-0" id="user-Character-1-0">
+									新闻资讯</label>
+							</dt>
+						</dl>
+						<dl class="cl permission-list2">
+							<dt>
+								<label class="">
+									<input type="checkbox" value="联系我们" name="user-Character-1-0" id="user-Character-1-0">
+									联系我们</label>
+							</dt>
+						</dl>
+						<dl class="cl permission-list2">
+							<dt>
+								<label class="">
+									<input type="checkbox" value="关于我们" name="user-Character-1-0" id="user-Character-1-0">
+									关于我们</label>
+							</dt>
+						</dl>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius" id="admin-permission-save" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+			</div>
+		</div>
+	</form>
+</article>
+</body>
+<!--_footer 作为公共模版分离出去-->
+	
+	{include file="common/footer_master"}
+
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写 admin_role_add.html 页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+	$(".permission-list dt input:checkbox").click(function(){
+		$(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
+	});
+	$(".permission-list2 dd input:checkbox").click(function(){
+		var l =$(this).parent().parent().find("input:checked").length;
+		var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
+		if($(this).prop("checked")){
+			$(this).closest("dl").find("dt input:checkbox").prop("checked",true);
+			$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
+		}
+		else{
+			if(l==0){
+				$(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+			}
+			if(l2==0){
+				$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
+			}
+		}
+	});
+	$("#admin-permission-save").on('click', function() {
+		var user = $("#select").val();
+		if(user  == '1'){
+			alert('超级管理员权限无法修改！请重新选择管理员');
+			return false;
+		}
+		//alert(user);
+		var checked = $("input[type='checkbox']:checked").val([]);
+		var names = "";
+		for(var i=0;i<checked.length;i++) {
+			names += checked[i].value + ",";
+		}
+		//console.log(names);
+		
+		var n = names.substring(0,names.length-1);
+		if(n == '图片管理,首页管理,案例管理,内容管理,新闻资讯,联系我们,关于我们'){
+			var n = '全部';
+		} else if(n == "图片管理,首页管理,案例管理"){
+			var n = '图片管理';
+		} else if(n == '内容管理,新闻资讯,联系我们,关于我们'){
+			var n = '内容管理';
+		} else if(n == '首页管理,案例管理'){
+			var n = '图片管理';
+		} else if(n == '新闻资讯,联系我们,关于我们'){
+			var n = '内容管理';
+		}
+		console.log(n);
+		console.log(user);
+
+		$.ajax({
+				url: "{:url('admin/index/permisson_inser')}",
+				async: false,
+				data:{uid:user,name:n},
+				dataType:'json',
+				success:function(data) {
+					//console.log('success');
+					if(data.status == 1) {
+						var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.msg('添加成功', {icon: 6,time:4000}); //添加成功后提示
+                        window.parent.location.reload() //刷父界面
+                        parent.layer.close(index); //关闭弹层的窗口
+					} else {
+						parent.layer.msg('添加失败', {icon: 5,time:2000});
+					}
+				},
+				error:function(data) {
+					parent.layer.msg('添加失败', {icon: 5,time:2000});
+					var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index); //关闭弹层的窗口
+				}
+			})
+	})
+})
+</script>
+</html>

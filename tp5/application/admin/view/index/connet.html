@@ -1,0 +1,45 @@
+﻿{include file="common/meta"}
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 内容管理 <span class="c-gray en">&gt;</span> 联系方式 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.reload();" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	
+	<div class="mt-20">
+	<table class="table table-border table-bordered table-hover table-bg table-sort">
+		<thead>
+			<tr class="text-c">
+				<th width="80">联系方式</th>
+				<th width="100">内容</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="text-c">
+				<td>电话号码</td>
+				<td>{$phone}</td>
+				<td class="td-manage">
+					<a title="编辑" href="{:url('admin/index/connet_edit')}?id=1" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+				</td>
+			</tr>
+			<tr class="text-c">
+				<td>QQ号码</td>
+				<td>{$qq}</td>
+				<td class="td-manage">
+					<a title="编辑" href="{:url('admin/index/connet_edit')}?id=2" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+				</td>
+			</tr>
+			<tr class="text-c">
+				<td>微信</td>
+				<td>{$wei}</td>
+				<td class="td-manage">
+					<a title="编辑" href="{:url('admin/index/connet_edit')}?id=3" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+	
+	{include file="common/footer"}
+
+<!--/_footer 作为公共模版分离出去-->

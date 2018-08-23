@@ -1,0 +1,166 @@
+﻿{include file="common/meta"}
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户中心 <span class="c-gray en">&gt;</span> 用户管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.reload();" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="cl pd-5 bg-1 bk-gray"> <span class="l">  
+		<a class="btn btn-primary radius" href="javascript:;" onclick="admin_role_add('添加角色','member_add','800','500')"><i class="Hui-iconfont">&#xe600;</i> 添加角色</a> </span> 
+		<span class="r">共有数据：<strong>{$count}</strong> 条</span>
+	</div>
+	<div class="mt-20">
+	<table class="table table-border table-bordered table-hover table-bg table-sort">
+		<thead>
+			<tr class="text-c">
+				<th width="80">ID</th>
+				<th width="100">管理员</th>
+				<th width="90">密码</th>
+				<th width="90">联系方式</th>
+				<th width="70">状态</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		{foreach $user as $key => $value}
+		<tbody>
+			<tr class="text-c">
+				<td>{$value['uid']}</td>
+				<!-- <td><u style="cursor:pointer" class="text-primary" onclick="member_show('个人信息','{:url(\'admin/index/member_show\',[\'id\'=>$value[\'uid\'],\'name\'=>$value[\'user_name\']])}','10001','360','400')">{$value['user_name']}</u></td> -->
+				<td><u style="cursor:pointer" class="text-primary" onclick="member_show('个人信息','member_show','{$value[\'uid\']}','360','400')">{$value['user_name']}</u></td>
+				<td>{$value['password']}</td>
+				<td>{$value['phone']}</td>
+				<td class="td-status"><span class="label label-success radius">已启用</span></td>
+				<td class="td-manage">
+					<a style="text-decoration:none" onClick="member_stop(this,'10001')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a> 
+					<a title="编辑" href="javascript:;" onclick="member_edit('编辑','member_edit.html','{$value[\'uid\']}','','510')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+					<a title="删除" href="javascript:;" onclick="member_del(this,{$value['uid']})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+				</td>
+			</tr>
+		</tbody>
+		{/foreach}
+	</table>
+	</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+	
+	{include file="common/footer_master"}
+
+<!--/_footer 作为公共模版分离出去-->
+<!--下方是  member_list.html  页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script type="text/javascript" src="../../lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="../../lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="../../js/ajax.js"></script>
+<script type="text/javascript">
+/*管理员-角色-添加*/
+function admin_role_add(title,url,w,h){
+	layer_show(title,url,w,h);
+}
+/*管理员-角色-编辑*/
+function admin_role_edit(title,url,id,w,h){
+	layer_show(title,url,w,h);
+}
+/*管理员-删除*/
+function member_del(obj,id){
+	layer.confirm('删除须谨慎，确认要删除吗？',function(index){
+		$.ajax({
+			url: "{:url('admin/index/admin_del')}",
+			data:{id:id},
+			success: function(data){
+				if(data.status == 1) {
+					$(obj).parents("tr").remove();
+					layer.msg('已删除!',{icon:1,time:2000});
+				} else {
+					layer.msg('删除失败!',{icon:2,time:2000});
+				}
+				
+			},
+			error:function(data) {
+				console.log(data.status);
+				layer.msg('删除失败!',{icon:2,time:2000});
+			},
+		});		
+	});
+}
+/*用户-查看*/
+function member_show(title,url,id,w,h){
+	if(id) {
+		ajax.request({
+              url:"{:url('admin/index/member_msg')}?"+"id="+id,
+              type:'get',
+              jsonp:'callback',
+              callback:function(data){
+                  var obj = JSON.parse(data);
+                  if(obj.state == 1){
+                  	//console.log(id);
+                    layer_show(title,url,w,h);
+                  } else {
+                  	alert('该人不存在');
+                  }
+              }
+          });
+	}
+}
+/*用户-停用*/
+function member_stop(obj,id){
+	layer.confirm('确认要停用吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'admin/index/connet_stop',
+			data:id,
+			dataType: 'json',
+			success: function(data){
+				$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_start(this,id)" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>');
+				$(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已停用</span>');
+				$(obj).remove();
+				layer.msg('已停用!',{icon: 5,time:1000});
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});		
+	});
+}
+
+/*用户-启用*/
+function member_start(obj,id){
+	layer.confirm('确认要启用吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'admin/index/connet_start',
+			dataType: 'json',
+			success: function(data){
+				$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_stop(this,id)" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>');
+				$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+				$(obj).remove();
+				layer.msg('已启用!',{icon: 6,time:1000});
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+/*用户-编辑*/
+function member_edit(title,url,id,w,h){
+	if(id) {
+		ajax.request({
+              url:"{:url('admin/index/member_msg')}?"+"id="+id,
+              type:'get',
+              jsonp:'callback',
+              callback:function(data){
+                  var obj = JSON.parse(data);
+                  if(obj.state == 1){
+                  	//console.log(id);
+                    layer_show(title,url,w,h);
+                  } else {
+                  	alert('该人不存在');
+                  }
+              }
+          });
+	}
+}
+/*密码-修改*/
+function change_password(title,url,id,w,h){
+	layer_show(title,url,w,h);	
+}
+</script>
+</body>
+</html>

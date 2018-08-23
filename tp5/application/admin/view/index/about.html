@@ -1,0 +1,62 @@
+﻿{include file="common/meta"}
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 内容管理 <span class="c-gray en">&gt;</span> 关于我们 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="mt-20">
+	<form action="{:url('admin/index/about_edit')}">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+				<tr class="text-c">
+					<th>区域</th>
+					<th>内容</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-c">
+					<td>
+						公司理念
+					</td>
+					<td>
+						{$confind}
+					</td>
+					<td rowspan="4">
+						<button style="width:30px;color:green;">编辑</button>
+					</td>
+				</tr>
+				<tr class="text-c">
+					<td>
+						关于我们
+					</td>
+					<td>
+						{$content}
+					</td>
+				</tr>
+				<tr class="text-c">
+					<td>
+						中间的标题
+					</td>
+					<td>
+						{$centent_title}
+					</td>
+				</tr>
+				<tr class="text-c">
+					<td>
+						中间的内容
+					</td>
+					<td>
+						{$centent_content}
+					</td>
+				</tr>
+			</tbody>
+			</form>
+		</table>
+	</form>
+		
+	</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+	
+	{include file="common/footer"}
+
+<!--/_footer 作为公共模版分离出去-->

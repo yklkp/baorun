@@ -1,0 +1,65 @@
+{include file="common/meta"}
+<body>
+<article class="page-container">
+	<form action="{:url('admin/index/article_edit_update')}" method="post" class="form form-horizontal" id="form-article-add">
+	<input type="hidden" name="id" value="{$id}">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>文章类型：</label>
+			<select class="formControls col-xs-8 col-sm-9" style="width:1275.75px;height:30px;margin-left:10px;" name="selected">
+				{if !empty($type == 0)}
+					<option name="news" value="0">公司新闻</option>
+					<option name="news" value="1">新闻资讯</option>
+				{/if}
+				{if !empty($type == 1)}
+					<option name="news" value="1">新闻资讯</option>
+					<option name="news" value="0">公司新闻</option>
+				{/if}
+			</select>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>文章标题：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$title}" placeholder="写上标题" id="articletitle" name="articletitle" style="width:1275.75px;margin-left:-10px;">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">文章摘要：</label>
+			<div class="formControls col-xs-8 col-sm-9" style="margin-top:30px;">
+				<textarea name="abstract" cols="" rows="" class="textarea"  placeholder="说点什么……" onKeyUp="$.Huitextarealength(this,10000)" style="height:300px;">{$detail}</textarea>
+				<p class="textarea-numberbar"><em class="textarea-length">0</em>/10000</p>
+				<!-- <textarea id="addtext" style="display: none;"></textarea> -->
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">文章作者：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$author}" placeholder="上传人名字" id="author" name="author">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="removeIframe();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+	
+	{include file="common/footer_master"}
+
+<!--/_footer 作为公共模版分离出去-->
+<script src="../../layui/layui.js"></script>
+<script>
+  	var layer = layui.layer
+  	,form = layui.form;
+	  
+  	layer.msg('Hello World');
+	layui.use('layedit', function(){
+  	var layedit = layui.layedit;
+  	layedit.build('#addtext'); //建立编辑器
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>系统登录</title>
+<link href="../../login_style/css/login.css" rel="stylesheet" rev="stylesheet" type="text/css" media="all" />
+<link href="../../login_style/css/demo.css" rel="stylesheet" rev="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="../../login_style/js/jquery1.42.min.js"></script>
+<script type="text/javascript" src="../../login_style/js/jquery.SuperSlide.js"></script>
+
+<script>
+$(function(){
+
+$(".i-text").focus(function(){
+$(this).addClass('h-light');
+});
+
+$(".i-text").focusout(function(){
+$(this).removeClass('h-light');
+});
+</script>
+</head>
+<body>
+<div class="header">
+  <h1 class="headerLogo"><a title="后台管理系统" target="_blank" href="#"><img alt="logo" src="../../login_style/images/logo.gif"></a></h1>
+	<div class="headerNav">
+		<a target="_blank" href="{:url('index/index/index')}">企业官网</a>
+		<a target="_blank" href="#">关于我们</a>
+		<a target="_blank" href="#">开发团队</a>
+		<a target="_blank" href="#">意见反馈</a>
+		<a target="_blank" href="#">帮助</a>	
+	</div>
+</div>
+
+<div class="banner">
+    <div class="login-aside">
+        <div id="o-box-up"></div>
+        <div id="o-box-down"  style="table-layout:fixed;">
+            <div class="error-box" style="color:pink;"></div>
+            <form class="registerform" action="{:url('admin/user/check')}" method="post">
+                  <div class="fm-item">
+                	   <label for="logonId" class="form-label">管理员名称：</label>
+                	   <input type="text" name="name" placeholder="输入账号" value="" maxlength="100" id="username" class="i-text">    
+                       <div class="ui-form-explain"></div>
+                  </div>
+                  
+                  <div class="fm-item">
+                	   <label for="logonId" class="form-label">登陆密码：</label>
+                	   <input type="password" name="password" maxlength="100" id="password" class="i-text">  
+                       <div class="ui-form-explain"></div>
+                  </div>
+                  
+                  <div class="fm-item pos-r">
+                	   <label for="logonId" class="form-label">验证码</label>
+                	   <input type="text" name="validate" placeholder="输入验证码" value="" maxlength="100" id="yzm" class="i-text" style="width:120px;height:40px;">    
+                       <div class="ui-form-explain"><img src="{:captcha_src()}" alt="captcha" title="看不清，点击换一张" onclick="this.src='{:captcha_src()}?d='+Math.random()"; class="yzm-img" id="yzm-img" style="width:130px;height:40px;" /></div>
+                       <div class="error-yzm" style="color:pink;font-size:8px;"></div>
+                  </div>
+                  
+                  <div class="fm-item">
+              	     <label for="logonId" class="form-label"></label>
+                     <button class="btn-login" id="btn"  value="" tabindex="4" disabled="disabled"></button>
+                     <button class="btn-init-login" id="btn-init" value="" tabindex="4" style="display:none;"></button>
+                      <div class="ui-form-explain"></div>
+                  </div>
+              </form>
+          </div>
+    </div>
+    <div class="bd">
+    		<ul>
+    			<li style="background:url(../../login_style/themes/theme-pic1.jpg) #CCE1F3 center 0 no-repeat;"><a target="_blank" href="#"></a></li>
+    			<li style="background:url(../../login_style/themes/theme-pic2.jpg) #BCE0FF center 0 no-repeat;"><a target="_blank" href="#"></a></li>
+    		</ul>
+    </div>
+    <div class="hd"><ul></ul></div>
+</div>
+<script type="text/javascript">jQuery(".banner").slide({ titCell:".hd ul", mainCell:".bd ul", effect:"fold",  autoPlay:true, autoPage:true, trigger:"click" });</script>
+<div class="banner-shadow"></div>
+<div class="footer">
+   <p>天道酬勤@kyle</p>
+</div>
+
+<script type="text/javascript" src="../../login_style/js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="../../js/ajax.js"></script>
+
+<!-- 用户名判断 -->
+<script>
+$(document).ready(function(){
+        $("#username").focus(function(){
+            $(".error-box").empty();
+            $("#password").val("");     
+            $("#yzm").val("");             //触发用户名的输入框时清空所有
+        });
+        $("#username").blur(function(){
+            var name = $("#username").val();
+            if(!name) {
+              $(".error-box").text('用户名不能为空！');
+              return false;
+            }
+            ajax.request({
+            url:"{:url('admin/user/check_name')}?"+"name="+name,
+            type:'get',
+            jsonp:'callback',
+            callback:function(data){
+                var obj = JSON.parse(data);
+                if(obj.state == 1){
+                  $(".error-box").empty();
+                }else {
+                  $(".error-box").text('用户名不存在！');
+                  $("#username").val("");
+                }
+            }
+          });
+        });
+}); 
+</script>
+
+<!-- 密码判断 -->
+<script>
+$(document).ready(function(){
+      $("#password").focus(function(){
+          $("#yzm").val("");
+          var name = $("#username").val();
+          if(!name) {
+            $(".error-box").text('请先填写用户名！');
+            return false;
+          } 
+      });
+
+      $("#password").blur(function(){
+            var pwd = $("#password").val();
+            var name = $("#username").val();
+            if(!pwd) {
+              $(".error-box").text('请填写密码！');
+              return false;
+            }
+            ajax.request({
+            url:"{:url('admin/user/check_pwd')}?"+"name="+name+ "&&" +"pwd="+pwd,
+            type:'get',
+            jsonp:'callback',
+            callback:function(data){
+                var obj = JSON.parse(data);
+                if(obj.state == 1){
+                  $(".error-box").empty();
+                }else {
+                  $(".error-box").text('密码错误！');
+                  $("#password").val("");
+                }
+            }
+            });
+      });
+      
+}); 
+</script>
+
+<!-- 验证码判断 触发输入框获取内容 输出5个验证码字符再进入Ajax-->
+<script>
+
+$(document).ready(function(){
+      $("#yzm").focus(function(){
+          var name = $("#username").val();
+          var pwd = $("#password").val();
+          // console.log(name);
+          // console.log(pwd);
+          if(!name && !pwd) {
+            $(".error-box").text('请先填写完整以上信息！');
+            return false;
+          }
+      }); 
+});
+
+$("#yzm").bind('input propertychange', function(){
+    //var name = $("#username").val();
+    var pwd = $("#password").val();
+    /*console.log(name);
+    console.log(pwd);
+    var error = $(".error-box").text();
+    console.log(error);
+    if(error){
+      return false;
+    }*/
+    if(!pwd) {
+      $(".error-box").text('请先填写完整以上信息！');
+      $("#yzm").val("");
+      return false;
+    }
+    var yzm = $(this).val();
+    var length = yzm.length;
+    console.log(length);
+    if(length == 5) {
+          ajax.request({
+              url:"{:url('admin/user/check_yzm')}?"+"yzm="+yzm,
+              type:'get',
+              jsonp:'callback',
+              callback:function(data){
+                  var obj = JSON.parse(data);
+                  if(obj.state == 1){
+                    $(".error-box").empty();
+                    $(".error-yzm").empty();
+                    $("#btn").hide();
+                    $("#btn-init").show();
+                  }else {
+                    $(".error-yzm").text('验证码错误！');
+                    $("#btn").show();
+                    $("#btn-init").hide();
+                    $("#yzm").val("");
+                    $("#yzm-img").attr("src","{:captcha_src()}?flag="+Math.random());
+                  }
+              }
+          });
+    }
+})
+
+/*
+****** 以下代码只会在输完验证码后必须点击外部事件才会触发Ajax，不符合实际，所以采用上面的事件
+*/
+
+
+/*$(document).ready(function(){
+      $("#yzm").focus(function(){
+          var name = $("#username").val();
+          var pwd = $("#password").val();
+          if(!name && !pwd) {
+            $(".error-box").text('请先填写完整以上信息！');
+            return false;
+          }
+      });
+
+      $("#yzm").blur(function(){
+            var yzm = $("#yzm").val();
+            var pwd = $("#password").val();
+            if(!pwd) {
+              return false;
+            }
+            ajax.request({
+            url:"{:url('admin/user/check_yzm')}?"+"yzm="+yzm,
+            type:'get',
+            jsonp:'callback',
+            callback:function(data){
+                var obj = JSON.parse(data);
+                if(obj.state == 1){
+                  $(".error-box").empty();
+                  $("#btn").hide();
+                  $("#btn-init").show();
+                }else {
+                  $(".error-box").text('验证码错误！');
+                  $("#yzm").val("");
+                  $("#yzm-img").attr("src","{:captcha_src()}?flag="+Math.random());
+                }
+            }
+            });
+      });
+      
+}); */
+</script>
+</body>
+</html>

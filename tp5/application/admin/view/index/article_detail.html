@@ -1,0 +1,26 @@
+{include file="common/meta"}
+<body>
+<div style="padding:20px 20px 0 20px;">
+	<div style="width:500px;height:60px;margin:0 auto;">
+		<strong style="font-size:30px;">{$data['title']}</strong>
+	</div>
+	<div style="width:600px;height:60px;margin:0 auto;">
+		<span style="padding:0 0 0 50px;">发表时间：{$data['time']}</span>
+		<span style="padding:0 0 0 20px;">发布者：{$data['author']}</span>
+		<span style="padding:0 0 0 20px;">
+		类别：{if $data['type'] == 1}
+			新闻资讯
+			{else}
+			公司新闻
+			{/if}
+		</span>
+	</div>
+	<div style="width:1000px;height:600px;margin:0 auto;font-size:20px;">{$data['detail']}</div>
+</div>
+</body>
+
+<!--_footer 作为公共模版分离出去-->
+	
+	{include file="common/footer"}
+
+<!--/_footer 作为公共模版分离出去-->
